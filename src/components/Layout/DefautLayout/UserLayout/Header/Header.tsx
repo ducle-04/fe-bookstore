@@ -1,121 +1,144 @@
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Menu, X, ShoppingCart, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import logoImg from "../../../../../assets/images/logo/logo.png";
 
-function Header() {
-    const location = useLocation();
+const Header: React.FC = () => {
+    const navigate = useNavigate();
+    const [isOpen, setIsOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
 
-    const handleScroll = (id: string) => {
-        if (location.pathname !== '/') {
-            window.location.href = '/#' + id;
-        } else {
-            const element = document.getElementById(id);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 50);
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const handleNavigate = (path: string) => {
+        navigate(path);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        setIsOpen(false);
+    };
+
+    const handleLogoClick = () => {
+        navigate("/");
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-2">
-            <div className="container">
-                {/* Logo */}
-                <Link
-                    className="navbar-brand"
-                    to="/"
-                    style={{
-                        fontWeight: 900,
-                        fontSize: 28,
-                        color: '#1a2233',
-                    }}
-                >
-                    BookStore
-                </Link>
+        <header
+            className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
+                ? "bg-white/90 backdrop-blur-md shadow-md"
+                : "bg-transparent"
+                }`}
+        >
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="flex justify-between items-center h-16">
 
-                {/* Toggle */}
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#mainNavbar"
-                >
-                    <span className="navbar-toggler-icon" />
-                </button>
+                    {/* Logo */}
+                    <button onClick={handleLogoClick} className="flex items-center">
+                        <img
+                            src={logoImg}
+                            alt="BookStore"
+                            className="h-12 w-auto transition hover:scale-105"
+                        />
+                    </button>
 
-                {/* Menu */}
-                <div className="collapse navbar-collapse" id="mainNavbar">
-                    <ul className="navbar-nav ms-auto align-items-lg-center">
-                        <li className="nav-item">
-                            <Link className="nav-link px-3" to="/">Trang chủ</Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link className={`nav-link px-3 ${location.pathname === '/books' ? 'active' : ''}`} to="/books">
-                                Sách
-                            </Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link className={`nav-link px-3 ${location.pathname === '/categories' ? 'active' : ''}`} to="/categories">
-                                Thể loại
-                            </Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link className={`nav-link px-3 ${location.pathname === '/blog' ? 'active' : ''}`} to="/blog">
-                                Blog
-                            </Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link className={`nav-link px-3 ${location.pathname === '/contact' ? 'active' : ''}`} to="/contact">
-                                Liên hệ
-                            </Link>
-                        </li>
-                    </ul>
-
-                    {/* Auth buttons (UI only) */}
-                    <div className="d-flex ms-lg-3 mt-3 mt-lg-0">
-                        <Link
-                            to="/login"
-                            className="btn btn-outline-dark me-2"
-                            style={{ borderRadius: 24 }}
-                        >
-                            Đăng nhập
-                        </Link>
-
-                        <Link
-                            to="/register"
-                            className="btn btn-dark"
-                            style={{ borderRadius: 24 }}
-                        >
-                            Đăng ký
-                        </Link>
+                    {/* Desktop menu */}
+                    <div className="hidden md:flex space-x-8">
+                        {[
+                            { name: "Trang chủ", to: "/" },
+                            { name: "Sách", to: "/books" },
+                            { name: "Thể loại", to: "/categories" },
+                            { name: "Tác giả", to: "/authors" },
+                            { name: "Giới thiệu", to: "/about" },
+                            { name: "Liên hệ", to: "/contact" },
+                        ].map((item) => (
+                            <button
+                                key={item.name}
+                                onClick={() => handleNavigate(item.to)}
+                                className="text-gray-700 hover:text-cyan-600 font-medium transition"
+                            >
+                                {item.name}
+                            </button>
+                        ))}
                     </div>
+
+                    {/* Right icons */}
+                    <div className="hidden md:flex items-center space-x-5">
+
+                        {/* Cart */}
+                        <button
+                            onClick={() => handleNavigate("/cart")}
+                            className="relative text-gray-700 hover:text-cyan-600 transition"
+                        >
+                            <ShoppingCart size={24} />
+                            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                                2
+                            </span>
+                        </button>
+
+                        {/* User */}
+                        <button
+                            onClick={() => handleNavigate("/login")}
+                            className="text-gray-700 hover:text-cyan-600 transition"
+                        >
+                            <User size={24} />
+                        </button>
+                    </div>
+
+                    {/* Mobile button */}
+                    <button
+                        className="md:hidden text-gray-800"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        {isOpen ? <X size={26} /> : <Menu size={26} />}
+                    </button>
                 </div>
-            </div>
 
-            {/* CSS */}
-            <style>
-                {`
-          .navbar-nav .nav-link {
-            border-radius: 18px;
-            transition: 0.2s;
-          }
+                {/* Mobile menu */}
+                {isOpen && (
+                    <div className="md:hidden bg-white border-t px-4 py-4 space-y-3">
+                        {[
+                            { name: "Trang chủ", to: "/" },
+                            { name: "Sách", to: "/books" },
+                            { name: "Thể loại", to: "/categories" },
+                            { name: "Tác giả", to: "/authors" },
+                            { name: "Giới thiệu", to: "/about" },
+                            { name: "Liên hệ", to: "/contact" },
+                        ].map((item) => (
+                            <button
+                                key={item.name}
+                                onClick={() => handleNavigate(item.to)}
+                                className="block w-full text-left text-gray-700 hover:text-cyan-600"
+                            >
+                                {item.name}
+                            </button>
+                        ))}
 
-          .navbar-nav .nav-link:hover,
-          .navbar-nav .nav-link.active {
-            background: #222;
-            color: #fff !important;
-          }
+                        <div className="flex gap-4 pt-3 border-t">
+                            <button
+                                onClick={() => handleNavigate("/cart")}
+                                className="flex items-center gap-2 text-gray-700"
+                            >
+                                <ShoppingCart size={20} /> Giỏ hàng
+                            </button>
 
-          .btn-dark:hover,
-          .btn-outline-dark:hover {
-            background: #0e5d90 !important;
-            color: white !important;
-          }
-        `}
-            </style>
-        </nav>
+                            <button
+                                onClick={() => handleNavigate("/login")}
+                                className="flex items-center gap-2 text-gray-700"
+                            >
+                                <User size={20} /> Đăng nhập
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </nav>
+        </header>
     );
-}
+};
 
 export default Header;
