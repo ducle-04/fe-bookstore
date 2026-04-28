@@ -2,8 +2,12 @@ import React from "react";
 import ScrollToTop from "../../components/OtherComponent/ScrollToTop";
 import Banner from "../../components/Layout/DefautLayout/UserLayout/Banner/Banner";
 import LibroAbout from "../../components/Layout/DefautLayout/UserLayout/Home/LibroAbout";
+import FlashSale from "../../components/Layout/DefautLayout/UserLayout/Home/FlashSale";
 import PopularGenres from "../../components/Layout/DefautLayout/UserLayout/Home/PopularGenres";
 import FreshlyAdded from "../../components/Layout/DefautLayout/UserLayout/Home/FreshlyAdded ";
+import TestimonialsCarousel from "../../components/Layout/DefautLayout/UserLayout/Home/TestimonialsCarousel";
+import WhyChoose from "../../components/Layout/DefautLayout/UserLayout/Home/WhyChoose";
+import BookDealsPage from "../../components/Layout/DefautLayout/UserLayout/Home/BookDealsPage";
 const Home: React.FC = () => {
     // Hàm cuộn về đầu trang
     const scrollToTop = () => {
@@ -15,8 +19,12 @@ const Home: React.FC = () => {
             <ScrollToTop />
             <Banner />
             <LibroAbout />
+            <FlashSale />
             <PopularGenres />
             <FreshlyAdded />
+            <BookDealsPage />
+            <TestimonialsCarousel />
+            <WhyChoose />
             <div className="text-center py-8">
                 <button
                     onClick={scrollToTop}

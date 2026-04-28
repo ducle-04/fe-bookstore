@@ -59,7 +59,7 @@ const Footer = () => {
                                 <MapPin className="text-white" size={24} />
                             </div>
                             <span className="font-extrabold text-2xl bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
-                                BookNest
+                                Libro
                             </span>
                         </div>
 
@@ -158,7 +158,7 @@ const Footer = () => {
 
                         <div className="h-40 rounded-lg overflow-hidden shadow-lg">
                             <iframe
-                                src="https://www.google.com/maps?q=Hanoi,Vietnam&output=embed"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.096339873328!2d105.84713001531662!3d21.028811985998207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ab009cd0a263%3A0x3b8d9d6a7c7b7b7b!2sHanoi%2C%20Vietnam!5e0!3m2!1sen!2svn!4v1697671234567"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
@@ -174,7 +174,7 @@ const Footer = () => {
 
                 <div className="footer-animate-item grid grid-cols-1 md:grid-cols-2 gap-4 items-center opacity-0 translate-y-10 scale-95 transition-all duration-[600ms] [&.footer-item-visible]:opacity-100 [&.footer-item-visible]:translate-y-0 [&.footer-item-visible]:scale-100">
                     <p className="text-center md:text-left text-sm text-gray-400">
-                        © {new Date().getFullYear()} BookNest. All rights reserved.
+                        © {new Date().getFullYear()} Libro. All rights reserved.
                     </p>
 
                     <div className="text-center md:text-right space-x-4 text-sm">
