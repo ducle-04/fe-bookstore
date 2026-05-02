@@ -74,7 +74,7 @@ export default function BookDetails() {
 
                         {/* Promo box */}
                         <div className="border-2 border-dashed border-cyan-300 rounded-xl p-4 mb-5 bg-cyan-50">
-                            <p className="font-bold text-gray-800 mb-3">CTKM Đầu Năm Mới Tại Dino Book Store</p>
+                            <p className="font-bold text-gray-800 mb-3">CTKM Đầu Năm Mới Tại Libro Book Store</p>
                             <ul className="space-y-2 text-sm text-gray-700">
                                 <li className="flex gap-2">
                                     <span className="text-cyan-500 mt-0.5">✅</span>

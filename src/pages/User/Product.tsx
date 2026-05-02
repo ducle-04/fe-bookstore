@@ -18,11 +18,11 @@ const allProducts: Product[] = [
     {
         id: 5,
         brand: "Holly Lansley",
-        name: "The Unbelievable...",
-        salePrice: 268000,
-        originalPrice: 0,
-        discount: 0,
-        image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=300&h=300&fit=crop",
+        name: "Harry Potter Và Bảo Bối Tử Thần",
+        salePrice: 285000,
+        originalPrice: 233000,
+        discount: 8,
+        image: "https://isach.info/images/story/cover/harry_potter_va_bao_boi_tu_than__j_k_rowling.jpg",
         isBook: true,
     },
     {
@@ -325,15 +325,19 @@ export default function ProductPage() {
     return (
         <div className="min-h-screen bg-white font-sans">
             {/* Header Title */}
-            <div className="text-center pt-32 pb-10 border-b border-gray-100 bg-gradient-to-b from-cyan-50 to-white">
-                <h1
-                    className="text-4xl font-bold text-center text-gray-900 uppercase tracking-wider relative inline-block"
-                    style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                >
-                    TẤT CẢ SẢN PHẨM
+            <div className="pt-28 pb-16 text-center border-b border-gray-100 bg-gradient-to-b from-cyan-50 to-white">
 
-                    <span className="block w-20 h-[3px] bg-gray-900 mx-auto mt-3 rounded-full"></span>
+                <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-500 to-blue-500">
+                        Tất cả sản phẩm
+                    </span>
                 </h1>
+
+                <p className="text-base text-gray-600 mt-4 max-w-xl mx-auto">
+                    Khám phá bộ sưu tập sách mới nhất với nhiều ưu đãi hấp dẫn dành cho bạn
+                </p>
+
+                <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mt-6 rounded-full"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 py-8 flex gap-8">
