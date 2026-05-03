@@ -69,11 +69,6 @@ const LoginPage: React.FC = () => {
         // window.location.href = 'http://localhost:8080/oauth2/authorization/facebook';
     };
 
-    const handleAppleLogin = () => {
-        alert('Chức năng đăng nhập Apple sẽ được triển khai sau');
-        // window.location.href = 'http://localhost:8080/oauth2/authorization/apple';
-    };
-
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
