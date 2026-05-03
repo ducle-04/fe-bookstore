@@ -12,7 +12,9 @@ import AdminUserManagement from "./pages/Admin/AdminUserManagement";
 import AdminCategoryManagement from "./pages/Admin/CategoryManagement";
 import OrderManagement from "./pages/Admin/Ordermanagement";
 import AddressManagement from "./pages/Admin/AddressManagement";
+
 import ProfilePage from "./pages/User/Profilepage";
+import AuthorManagement from "./pages/Admin/AuthorManagement"
 
 const PublicPage = [
     { path: "/", component: Home, layout: UserLayout },
@@ -29,6 +31,7 @@ const PublicPage = [
     { path: "/admin/categories", component: AdminCategoryManagement, layout: AdminLayout },
     { path: "/admin/orders", component: OrderManagement, layout: AdminLayout },
     { path: "/admin/addresses", component: AddressManagement, layout: AdminLayout },
+    { path: "/admin/authors", component: AuthorManagement, layout: AdminLayout },
 ];
 
 const PrivatePage: any[] = [];

@@ -417,7 +417,7 @@ export default function BookAdmin() {
             {/* ── Header ── */}
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 24 }}>
                 <div>
-                    <h1 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a" }}>📚 Quản lý sách</h1>
+                    <h1 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a" }}> Quản lý sách</h1>
                     <p style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>BookStore Admin — {books.length} đầu sách</p>
                 </div>
                 <button onClick={() => setDrawer(emptyBook())}

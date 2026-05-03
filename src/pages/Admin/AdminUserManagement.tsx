@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
+import { Pencil, Repeat, Trash2 } from "lucide-react";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 type UserStatus = "ACTIVE" | "INACTIVE" | "BANNED" | "PENDING";
@@ -21,7 +22,7 @@ interface User {
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 const INITIAL_USERS: User[] = [
     { id: 1, email: "nguyen.van.an@gmail.com", userName: "nguyenvanan", fullName: "Nguyễn Văn An", phone: "0912345678", dob: "1995-03-15", lastLoginAt: "2025-05-01T08:30:00", isEmailVerified: true, isPhoneVerified: true, status: "ACTIVE", isDeleted: false, roles: ["USER"] },
-    { id: 2, email: "tran.thi.bich@gmail.com", userName: "tranbich", fullName: "Trần Thị Bích", phone: "0987654321", dob: "1998-07-22", lastLoginAt: "2025-04-28T14:15:00", isEmailVerified: true, isPhoneVerified: false, status: "ACTIVE", isDeleted: false, roles: ["USER", "ADMIN"] },
+    { id: 2, email: "tran.thi.bich@gmail.com", userName: "tranbich", fullName: "Trần Thị Bích", phone: "0987654321", dob: "1998-07-22", lastLoginAt: "2025-04-28T14:15:00", isEmailVerified: true, isPhoneVerified: false, status: "ACTIVE", isDeleted: false, roles: ["ADMIN"] },
     { id: 3, email: "le.minh.cuong@gmail.com", userName: "leminhcuong", fullName: "Lê Minh Cường", phone: "0911111111", dob: "1990-11-08", lastLoginAt: "2025-03-10T09:00:00", isEmailVerified: false, isPhoneVerified: false, status: "BANNED", isDeleted: false, roles: ["USER"] },
     { id: 4, email: "pham.thu.dung@gmail.com", userName: "phamtdung", fullName: "Phạm Thu Dung", phone: "0922222222", dob: "2000-01-30", lastLoginAt: "2025-04-15T16:45:00", isEmailVerified: true, isPhoneVerified: true, status: "INACTIVE", isDeleted: false, roles: ["USER"] },
     { id: 5, email: "hoang.van.em@gmail.com", userName: "hoanganem", fullName: "Hoàng Văn Em", phone: "0933333333", dob: "1993-05-18", lastLoginAt: "2025-02-20T11:20:00", isEmailVerified: true, isPhoneVerified: false, status: "ACTIVE", isDeleted: true, roles: ["USER"] },
@@ -297,7 +298,7 @@ export default function AdminUserManagement() {
             {/* Header */}
             <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: 24 }}>
                 <div>
-                    <h1 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a" }}>👤 Quản lý người dùng</h1>
+                    <h1 style={{ fontSize: 22, fontWeight: 700, color: "#0f172a" }}> Quản lý người dùng</h1>
                     <p style={{ fontSize: 13, color: "#64748b", marginTop: 2 }}>BookStore Admin — {users.length} tài khoản</p>
                 </div>
                 <button onClick={() => setDrawer(emptyUser())}
@@ -378,9 +379,32 @@ export default function AdminUserManagement() {
                                     <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                                         {!user.isDeleted && (
                                             <>
-                                                <ActionBtn title="Chỉnh sửa" onClick={() => setDrawer({ ...user })} hoverBg="#eef2ff" hoverBorder="#6366f1">✎</ActionBtn>
-                                                <ActionBtn title="Đổi trạng thái" onClick={() => setModal({ type: "changeStatus", user })} hoverBg="#fef9ee" hoverBorder="#f59e0b">◈</ActionBtn>
-                                                <ActionBtn title="Xóa" onClick={() => handleDelete(user)} hoverBg="#fef2f2" hoverBorder="#ef4444">🗑</ActionBtn>
+                                                <ActionBtn
+                                                    title="Chỉnh sửa"
+                                                    onClick={() => setDrawer({ ...user })}
+                                                    hoverBg="#eef2ff"
+                                                    hoverBorder="#6366f1"
+                                                >
+                                                    <Pencil className="w-4 h-4" />
+                                                </ActionBtn>
+
+                                                <ActionBtn
+                                                    title="Đổi trạng thái"
+                                                    onClick={() => setModal({ type: "changeStatus", user })}
+                                                    hoverBg="#fef9ee"
+                                                    hoverBorder="#f59e0b"
+                                                >
+                                                    <Repeat className="w-4 h-4" />
+                                                </ActionBtn>
+
+                                                <ActionBtn
+                                                    title="Xóa"
+                                                    onClick={() => handleDelete(user)}
+                                                    hoverBg="#fef2f2"
+                                                    hoverBorder="#ef4444"
+                                                >
+                                                    <Trash2 className="w-4 h-4" />
+                                                </ActionBtn>
                                             </>
                                         )}
                                         {user.isDeleted && <ActionBtn title="Khôi phục" onClick={() => handleRestore(user)} hoverBg="#f0fdf4" hoverBorder="#22c55e">↺</ActionBtn>}

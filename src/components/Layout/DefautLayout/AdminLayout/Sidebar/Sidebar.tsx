@@ -9,7 +9,8 @@ import {
     FaShoppingCart,
     FaSignOutAlt,
     FaLayerGroup,
-    FaMapMarkerAlt
+    FaMapMarkerAlt,
+    FaPenNib
 } from "react-icons/fa";
 import { MdDashboard } from "react-icons/md";
 
@@ -31,6 +32,11 @@ const menu = [
         label: "Quản lý Sách",
         icon: <FaBook className="w-5 h-5" />,
         path: "/admin/books",
+    },
+    {
+        label: "Quản lý Tác giả",
+        icon: <FaPenNib className="w-5 h-5" />,
+        path: "/admin/authors",
     },
     {
         label: "Quản lý Tài Khoản",

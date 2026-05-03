@@ -606,7 +606,7 @@ export default function OrderPage() {
                             <div className="relative shrink-0">
                                 <div className="w-14 h-16 bg-red-100 rounded-lg overflow-hidden">
                                     <img
-                                        src="https://isach.info/images/story/cover/harry_potter_va_bao_boi_tu_than__j_k_rowling.jpg"
+                                        src="https://cdn1.fahasa.com/media/catalog/product/h/a/harry_potter_va_bao_boi_tu_than___tap_7_tai_ban_2017__1_2018_07_05_14_18_35.JPG"
                                         alt="Harry Potter"
                                         className="w-full h-full object-cover"
                                         onError={(e) => { (e.target as HTMLImageElement).src = ""; }}

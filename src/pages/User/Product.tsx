@@ -22,7 +22,7 @@ const allProducts: Product[] = [
         salePrice: 285000,
         originalPrice: 233000,
         discount: 8,
-        image: "https://isach.info/images/story/cover/harry_potter_va_bao_boi_tu_than__j_k_rowling.jpg",
+        image: "https://cdn1.fahasa.com/media/catalog/product/h/a/harry_potter_va_bao_boi_tu_than___tap_7_tai_ban_2017__1_2018_07_05_14_18_35.JPG",
         isBook: true,
     },
     {

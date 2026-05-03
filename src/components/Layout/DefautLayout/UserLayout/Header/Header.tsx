@@ -10,10 +10,10 @@ import Cart from "../Cart/Cart";
 const Header: React.FC = () => {
     const navigate = useNavigate();
 
-    const [isOpen, setIsOpen] = useState(false);           // Mobile menu
+    const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [search, setSearch] = useState("");
-    const [isCartOpen, setIsCartOpen] = useState(false);   // Cart sidebar
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -51,8 +51,8 @@ const Header: React.FC = () => {
         <>
             <header
                 className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled
-                        ? "bg-white/95 backdrop-blur-md shadow-md"
-                        : "bg-transparent"
+                    ? "bg-white/95 backdrop-blur-md shadow-md"
+                    : "bg-transparent"
                     }`}
             >
                 <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,7 +73,6 @@ const Header: React.FC = () => {
                                 { name: "Trang chủ", to: "/" },
                                 { name: "Sách", to: "/books" },
                                 { name: "Thể loại", to: "/categories" },
-                                { name: "Tác giả", to: "/authors" },
                                 { name: "Giới thiệu", to: "/about" },
                                 { name: "Liên hệ", to: "/contact" },
                             ].map((item) => (
@@ -115,7 +114,7 @@ const Header: React.FC = () => {
                                 </span>
                             </button>
 
-                            {/* User Icon - Sửa ở đây */}
+                            {/* User Icon */}
                             <button
                                 onClick={handleUserClick}
                                 className="text-gray-700 hover:text-cyan-600 transition p-1"
@@ -141,7 +140,6 @@ const Header: React.FC = () => {
                                 { name: "Trang chủ", to: "/" },
                                 { name: "Sách", to: "/books" },
                                 { name: "Thể loại", to: "/categories" },
-                                { name: "Tác giả", to: "/authors" },
                                 { name: "Giới thiệu", to: "/about" },
                                 { name: "Liên hệ", to: "/contact" },
                             ].map((item) => (

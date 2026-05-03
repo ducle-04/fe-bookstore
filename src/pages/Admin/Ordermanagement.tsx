@@ -1,4 +1,11 @@
 import { useState } from "react";
+import {
+    Package,
+    BarChart3,
+    Search,
+    Globe,
+    Smartphone
+} from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -285,10 +292,15 @@ function OrderDetailPanel({ order, onClose, onStatusChange }: {
                     </Section>
 
                     {/* meta */}
+
                     <Section title="Thông tin đơn">
                         <Row label="Ngày đặt" value={fmtDate(order.orderedAt)} />
                         {order.deliveredAt && <Row label="Ngày giao" value={fmtDate(order.deliveredAt)} />}
-                        <Row label="Nguồn" value={order.source === "web" ? "🌐 Website" : "📱 Mobile"} />
+                        <Row label="Nguồn" value={
+                            order.source === "web"
+                                ? <span className="flex items-center gap-1"><Globe className="w-3.5 h-3.5" /> Website</span>
+                                : <span className="flex items-center gap-1"><Smartphone className="w-3.5 h-3.5" /> Mobile</span>
+                        } />
                         {order.promotionCode && <Row label="Mã KM" value={order.promotionCode} />}
                         {order.note && <Row label="Ghi chú" value={order.note} />}
                     </Section>
@@ -333,12 +345,21 @@ function Section({ title, children }: { title: string; children: React.ReactNode
         </div>
     );
 }
-
-function Row({ label, value, className = "" }: { label: string; value: string; className?: string }) {
+function Row({
+    label,
+    value,
+    className = "",
+}: {
+    label: string;
+    value: React.ReactNode;
+    className?: string;
+}) {
     return (
         <div className="flex justify-between text-sm">
             <span className="text-slate-400">{label}</span>
-            <span className={`font-medium text-slate-700 text-right max-w-[60%] ${className}`}>{value}</span>
+            <span className={`font-medium text-slate-700 text-right max-w-[60%] ${className}`}>
+                {value}
+            </span>
         </div>
     );
 }
@@ -373,21 +394,25 @@ export default function OrderManagement() {
             {/* ── Top bar ── */}
             <header className="bg-white border-b border-slate-100 px-6 py-3 flex items-center gap-1">
                 {[
-                    { key: "orders", icon: "📦", label: "Đơn hàng" },
-                    { key: "stats", icon: "📊", label: "Thống kê" },
-                ].map((item) => (
-                    <button
-                        key={item.key}
-                        onClick={() => setView(item.key as "orders" | "stats")}
-                        className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
-              ${view === item.key
-                                ? "bg-indigo-50 text-indigo-700"
-                                : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}
-                    >
-                        <span>{item.icon}</span>
-                        {item.label}
-                    </button>
-                ))}
+                    { key: "orders", icon: Package, label: "Đơn hàng" },
+                    { key: "stats", icon: BarChart3, label: "Thống kê" },
+                ].map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                        <button
+                            key={item.key}
+                            onClick={() => setView(item.key as "orders" | "stats")}
+                            className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all
+                ${view === item.key
+                                    ? "bg-indigo-50 text-indigo-700"
+                                    : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"}`}
+                        >
+                            <Icon className="w-4 h-4" />
+                            {item.label}
+                        </button>
+                    );
+                })}
             </header>
 
             {/* ── Content ── */}
@@ -453,7 +478,7 @@ function OrdersView({ orders, allOrders, search, setSearch, statusFilter, setSta
             {/* toolbar */}
             <div className="flex gap-3">
                 <div className="relative flex-1">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                     <input
                         type="text"
                         placeholder="Tìm theo mã đơn, tên, email..."
@@ -597,7 +622,9 @@ function StatsView({ stats, orders }: { stats: OrderStatistics; orders: Order[] 
                     {orders.slice(0, 5).map((o) => (
                         <div key={o.id} className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center text-sm">📦</div>
+                                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                                    <Package className="w-4 h-4 text-indigo-600" />
+                                </div>
                                 <div>
                                     <p className="text-xs font-mono font-semibold text-indigo-600">{o.code}</p>
                                     <p className="text-xs text-slate-400">{o.customerName}</p>

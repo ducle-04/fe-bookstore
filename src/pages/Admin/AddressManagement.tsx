@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Search, Trash2, X } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -129,7 +130,9 @@ function DeleteModal({ address, onConfirm, onCancel }: {
             <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onCancel} />
             <div className="relative bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm mx-4">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-lg">🗑️</div>
+                    <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center">
+                        <Trash2 className="w-5 h-5 text-red-500" />
+                    </div>
                     <div>
                         <p className="font-bold text-slate-800">Xoá địa chỉ</p>
                         <p className="text-xs text-slate-400">Hành động này không thể hoàn tác</p>
@@ -179,7 +182,7 @@ function AddressDetailPanel({ address, onClose, onDelete }: {
                         onClick={onClose}
                         className="w-8 h-8 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center text-slate-600 transition-colors"
                     >
-                        ✕
+                        <X className="w-4 h-4" />
                     </button>
                 </div>
 
@@ -224,7 +227,10 @@ function AddressDetailPanel({ address, onClose, onDelete }: {
                         onClick={() => onDelete(address)}
                         className="w-full py-2.5 rounded-xl border border-red-200 text-red-600 text-sm font-semibold hover:bg-red-50 transition-colors"
                     >
-                        🗑️ Xoá địa chỉ này
+                        <span className="flex items-center justify-center gap-2">
+                            <Trash2 className="w-4 h-4" />
+                            Xoá địa chỉ này
+                        </span>
                     </button>
                 </div>
             </div>
@@ -312,7 +318,7 @@ export default function AddressManagement() {
                 {/* toolbar */}
                 <div className="flex gap-3 flex-wrap">
                     <div className="relative flex-1 min-w-48">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                             type="text"
                             placeholder="Tìm theo tên, SĐT, email, địa chỉ..."

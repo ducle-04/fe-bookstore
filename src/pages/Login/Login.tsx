@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Eye, EyeOff, Mail, Apple } from 'lucide-react';
+import { Eye, EyeOff, Mail } from 'lucide-react';
 import { FaFacebook } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { validateLoginForm } from '../../utils/formValidation';
@@ -196,7 +196,7 @@ const LoginPage: React.FC = () => {
                 </div>
 
                 {/* Social Login */}
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 gap-3">
                     <button
                         type="button"
                         onClick={handleFacebookLogin}
@@ -215,14 +215,7 @@ const LoginPage: React.FC = () => {
                         <span className="hidden sm:inline">Google</span>
                     </button>
 
-                    <button
-                        type="button"
-                        onClick={handleAppleLogin}
-                        className="flex items-center justify-center gap-2 border-2 border-gray-800 text-gray-800 font-semibold py-3 rounded-full hover:bg-gray-100 transition-colors"
-                    >
-                        <Apple size={20} />
-                        <span className="hidden sm:inline">Apple</span>
-                    </button>
+
                 </div>
             </div>
         </div>

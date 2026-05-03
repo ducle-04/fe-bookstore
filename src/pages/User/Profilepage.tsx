@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { User, Lock } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = "profile" | "password";
@@ -356,9 +357,15 @@ function PasswordTab() {
 export default function ProfilePage() {
     const [tab, setTab] = useState<Tab>("profile");
 
-    const tabs: { key: Tab; label: string; icon: string }[] = [
-        { key: "profile", label: "Thông tin cá nhân", icon: "👤" },
-        { key: "password", label: "Đổi mật khẩu", icon: "🔒" },
+    type TabItem = {
+        key: Tab;
+        label: string;
+        icon: React.ElementType;
+    };
+
+    const tabs: TabItem[] = [
+        { key: "profile", label: "Thông tin cá nhân", icon: User },
+        { key: "password", label: "Đổi mật khẩu", icon: Lock },
     ];
 
     return (
@@ -377,19 +384,22 @@ export default function ProfilePage() {
 
                 {/* Tab bar */}
                 <div className="flex gap-1 bg-white border border-slate-100 rounded-2xl p-1 shadow-sm mb-5">
-                    {tabs.map((t) => (
-                        <button
-                            key={t.key}
-                            onClick={() => setTab(t.key)}
-                            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all
+                    {tabs.map((t) => {
+                        const Icon = t.icon;
+                        return (
+                            <button
+                                key={t.key}
+                                onClick={() => setTab(t.key)}
+                                className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-all
                 ${tab === t.key
-                                    ? "bg-indigo-50 text-indigo-700 shadow-sm"
-                                    : "text-slate-500 hover:text-slate-700"}`}
-                        >
-                            <span>{t.icon}</span>
-                            {t.label}
-                        </button>
-                    ))}
+                                        ? "bg-indigo-50 text-indigo-700 shadow-sm"
+                                        : "text-slate-500 hover:text-slate-700"}`}
+                            >
+                                <Icon className="w-4 h-4" />
+                                {t.label}
+                            </button>
+                        );
+                    })}
                 </div>
 
                 {/* Content */}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const mockRelated = [
     {
@@ -28,11 +29,13 @@ const mockRelated = [
 ];
 
 const coupons = [
-    { code: "DINO200", desc: "Giảm 200k giá trị đơn hàng", exp: "12/12/2024", color: "bg-cyan-100 text-cyan-700" },
-    { code: "DINO100", desc: "Giảm 100k cho đơn từ 500k", exp: "24/12/2024", color: "bg-emerald-100 text-emerald-700" },
+    { code: "LIBRO200", desc: "Giảm 200k giá trị đơn hàng", exp: "12/12/2024", color: "bg-cyan-100 text-cyan-700" },
+    { code: "LIBRO100", desc: "Giảm 100k cho đơn từ 500k", exp: "24/12/2024", color: "bg-emerald-100 text-emerald-700" },
 ];
 
+
 export default function BookDetails() {
+    const navigate = useNavigate();
     const [qty, setQty] = useState(1);
     const [tab, setTab] = useState<"mo-ta" | "danh-gia">("mo-ta");
     const [saved, setSaved] = useState<string | null>(null);
@@ -47,13 +50,13 @@ export default function BookDetails() {
                     {/* Book Cover */}
                     <div className="flex flex-col items-center gap-3 min-w-[220px]">
                         <img
-                            src="https://isach.info/images/story/cover/harry_potter_va_bao_boi_tu_than__j_k_rowling.jpg"
+                            src="https://cdn1.fahasa.com/media/catalog/product/h/a/harry_potter_va_bao_boi_tu_than___tap_7_tai_ban_2017__1_2018_07_05_14_18_35.JPG"
                             alt="Harry Potter Và Bảo Bối Tử Thần"
                             className="rounded-lg shadow-md border border-gray-200 w-[220px] h-[300px] object-cover"
                         />
                         <div className="flex gap-2">
                             <img
-                                src="https://isach.info/images/story/cover/harry_potter_va_bao_boi_tu_than__j_k_rowling.jpg"
+                                src="https://cdn1.fahasa.com/media/catalog/product/h/a/harry_potter_va_bao_boi_tu_than___tap_7_tai_ban_2017__1_2018_07_05_14_18_35.JPG"
                                 alt="thumb"
                                 className="rounded border-2 border-cyan-400 w-14 h-[76px] object-cover cursor-pointer"
                             />
@@ -155,7 +158,10 @@ export default function BookDetails() {
                                 </div>
                             </div>
 
-                            <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition">
+                            <button
+                                onClick={() => navigate("/order")}
+                                className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-3 rounded-lg transition"
+                            >
                                 Mua ngay
                             </button>
                             <button className="w-full border-2 border-gray-300 hover:border-cyan-400 text-gray-700 font-semibold py-3 rounded-lg transition">
