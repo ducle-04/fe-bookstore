@@ -12,8 +12,10 @@ import AdminUserManagement from "./pages/Admin/AdminUserManagement";
 import AdminCategoryManagement from "./pages/Admin/CategoryManagement";
 import OrderManagement from "./pages/Admin/Ordermanagement";
 import AddressManagement from "./pages/Admin/AddressManagement";
-
+import AboutPage from "./pages/User/About";
 import ProfilePage from "./pages/User/Profilepage";
+import CategoryPage from "./pages/User/Categorypage";
+import OrderHistoryPage from "./pages/User/OrderHistoryPage";
 import AuthorManagement from "./pages/Admin/AuthorManagement"
 
 const PublicPage = [
@@ -24,6 +26,9 @@ const PublicPage = [
     { path: "/register", component: RegisterPage, layout: null },
     { path: "/login", component: LoginPage, layout: null },
     { path: "/profile", component: ProfilePage, layout: UserLayout },
+    { path: "/about", component: AboutPage, layout: UserLayout },
+    { path: "/categories", component: CategoryPage, layout: UserLayout },
+    { path: "/my-orders", component: OrderHistoryPage, layout: UserLayout },
 
     { path: "/admin", component: Dashboard, layout: AdminLayout },
     { path: "/admin/books", component: BookManagement, layout: AdminLayout },

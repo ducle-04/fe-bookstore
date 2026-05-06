@@ -1,4 +1,14 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useRef } from "react";
+import {
+    Pencil,
+    Trash2,
+    Percent,
+    Pause,
+    Play,
+    X,
+    Upload,
+    Link
+} from "lucide-react";
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 interface Category { id: number; name: string; }
@@ -133,6 +143,163 @@ function StatusBadge({ book }: { book: Book }) {
     );
 }
 
+// ─── IMAGE UPLOADER ───────────────────────────────────────────────────────────
+function ImageUploader({ value, onChange }: { value: string; onChange: (url: string) => void }) {
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [dragging, setDragging] = useState(false);
+    const [urlInput, setUrlInput] = useState("");
+    const [tab, setTab] = useState<"upload" | "url">("upload");
+
+    const handleFile = (file: File) => {
+        if (!file.type.startsWith("image/")) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const result = e.target?.result as string;
+            onChange(result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        setDragging(false);
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) handleFile(file);
+    };
+
+    const handleUrlApply = () => {
+        if (urlInput.trim()) {
+            onChange(urlInput.trim());
+            setUrlInput("");
+        }
+    };
+
+    return (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {/* Preview */}
+            <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
+                <div style={{
+                    width: 80, height: 112, borderRadius: 8, border: "1px solid #e2e8f0",
+                    overflow: "hidden", background: "#f8fafc", flexShrink: 0,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                    {value ? (
+                        <img src={value} alt="cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                        <span style={{ fontSize: 28, opacity: 0.3 }}>📖</span>
+                    )}
+                </div>
+
+                <div style={{ flex: 1 }}>
+                    {/* Tab switcher */}
+                    <div style={{ display: "flex", gap: 0, marginBottom: 10, borderRadius: 7, overflow: "hidden", border: "1px solid #e2e8f0", width: "fit-content" }}>
+                        {(["upload", "url"] as const).map(t => (
+                            <button
+                                key={t}
+                                onClick={() => setTab(t)}
+                                style={{
+                                    padding: "6px 14px",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    fontSize: 12,
+                                    fontWeight: 600,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 6,
+                                    background: tab === t ? "#6366f1" : "#fff",
+                                    color: tab === t ? "#fff" : "#64748b",
+                                    transition: "all .15s",
+                                }}
+                            >{t === "upload" ? (
+                                <>
+                                    <Upload size={14} />
+                                    Tải lên
+                                </>
+                            ) : (
+                                <>
+                                    <Link size={14} />
+                                    URL
+                                </>
+                            )}
+                            </button>
+                        ))}
+                    </div>
+
+                    {tab === "upload" ? (
+                        <>
+                            {/* Drop zone */}
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                onDragOver={e => { e.preventDefault(); setDragging(true); }}
+                                onDragLeave={() => setDragging(false)}
+                                onDrop={handleDrop}
+                                style={{
+                                    border: `2px dashed ${dragging ? "#6366f1" : "#cbd5e1"}`,
+                                    borderRadius: 8,
+                                    padding: "14px 12px",
+                                    textAlign: "center",
+                                    cursor: "pointer",
+                                    background: dragging ? "#eef2ff" : "#fafbfc",
+                                    transition: "all .2s",
+                                }}
+                            >
+                                <Upload size={22} style={{ marginBottom: 4, opacity: 0.7 }} />
+                                <p style={{ fontSize: 12, color: "#64748b", margin: 0 }}>
+                                    Kéo thả ảnh vào đây hoặc{" "}
+                                    <span style={{ color: "#6366f1", fontWeight: 600 }}>chọn file</span>
+                                </p>
+                                <p style={{ fontSize: 11, color: "#94a3b8", margin: "4px 0 0" }}>
+                                    PNG, JPG, WEBP — tối đa 5MB
+                                </p>
+                            </div>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={handleFileChange}
+                            />
+                        </>
+                    ) : (
+                        <div style={{ display: "flex", gap: 6 }}>
+                            <input
+                                value={urlInput}
+                                onChange={e => setUrlInput(e.target.value)}
+                                placeholder="https://..."
+                                style={{ ...inputStyle, flex: 1 }}
+                                onKeyDown={e => e.key === "Enter" && handleUrlApply()}
+                            />
+                            <button onClick={handleUrlApply} style={{
+                                padding: "8px 12px", borderRadius: 7, border: "none",
+                                background: "#6366f1", color: "#fff", fontSize: 12,
+                                fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+                            }}>
+                                Áp dụng
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* Remove button */}
+            {value && (
+                <button onClick={() => onChange("")} style={{
+                    alignSelf: "flex-start", padding: "4px 10px", borderRadius: 6,
+                    border: "1px solid #fecaca", background: "#fef2f2", color: "#ef4444",
+                    fontSize: 12, fontWeight: 600, cursor: "pointer",
+                }}>
+                    <X size={16} /> Xóa ảnh
+                </button>
+            )}
+        </div>
+    );
+}
+
 // ─── STATS BAR ────────────────────────────────────────────────────────────────
 function StatsBar({ books }: { books: Book[] }) {
     const s = useMemo(() => ({
@@ -258,7 +425,7 @@ function BookDrawer({ book, onClose, onSave }: {
 
     return (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.3)", zIndex: 100, display: "flex", justifyContent: "flex-end" }} onClick={onClose}>
-            <div style={{ width: 520, maxWidth: "95vw", background: "#fff", height: "100vh", display: "flex", flexDirection: "column", boxShadow: "-8px 0 40px rgba(0,0,0,.15)" }} onClick={e => e.stopPropagation()}>
+            <div style={{ width: 540, maxWidth: "95vw", background: "#fff", height: "100vh", display: "flex", flexDirection: "column", boxShadow: "-8px 0 40px rgba(0,0,0,.15)" }} onClick={e => e.stopPropagation()}>
 
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 24px", borderBottom: "1px solid #f1f5f9", flexShrink: 0 }}>
@@ -268,72 +435,87 @@ function BookDrawer({ book, onClose, onSave }: {
 
                 {/* Scrollable body */}
                 <div style={{ flex: 1, overflowY: "auto", padding: "20px 24px" }}>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
-                        <div style={{ gridColumn: "span 2" }}>
-                            <Field label="Tên sách *">
-                                <input value={form.title} onChange={setStr("title")} placeholder="Nhập tên sách..." style={inputStyle} />
-                            </Field>
+                        {/* ── Ảnh bìa ── */}
+                        <div style={{ background: "#f8fafc", borderRadius: 10, padding: 14, border: "1px solid #e2e8f0" }}>
+                            <p style={{ fontSize: 12, fontWeight: 600, color: "#475569", textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 10 }}>
+                                Ảnh bìa sách
+                            </p>
+                            <ImageUploader
+                                value={form.coverImage}
+                                onChange={(url) => setForm(prev => ({ ...prev, coverImage: url }))}
+                            />
                         </div>
 
-                        <Field label="ISBN">
-                            <input value={form.isbn} onChange={setStr("isbn")} placeholder="9786..." style={inputStyle} />
-                        </Field>
+                        {/* ── Fields grid ── */}
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
 
-                        <Field label="Ngôn ngữ">
-                            <select value={form.language} onChange={setStr("language")} style={inputStyle}>
-                                <option value="vi">Tiếng Việt</option>
-                                <option value="en">English</option>
-                            </select>
-                        </Field>
+                            <div style={{ gridColumn: "span 2" }}>
+                                <Field label="Tên sách *">
+                                    <input value={form.title} onChange={setStr("title")} placeholder="Nhập tên sách..." style={inputStyle} />
+                                </Field>
+                            </div>
 
-                        <Field label="Giá bán (₫) *">
-                            <input type="number" value={form.price} onChange={setNum("price")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Giá vốn (₫)">
-                            <input type="number" value={form.costPrice || ""} onChange={setNum("costPrice")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Tồn kho *">
-                            <input type="number" value={form.stockQuantity} onChange={setNum("stockQuantity")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Điểm đặt hàng lại">
-                            <input type="number" value={form.reorderPoint} onChange={setNum("reorderPoint")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Số trang">
-                            <input type="number" value={form.pageCount || ""} onChange={setNum("pageCount")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Năm xuất bản">
-                            <input type="number" value={form.yearPublished || ""} onChange={setNum("yearPublished")} style={inputStyle} />
-                        </Field>
-
-                        <Field label="Thể loại">
-                            <select value={form.category?.id ?? ""} style={inputStyle}
-                                onChange={e => setForm(prev => ({ ...prev, category: CATEGORIES.find(c => c.id === Number(e.target.value)) ?? null }))}>
-                                <option value="">-- Chọn thể loại --</option>
-                                {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                            </select>
-                        </Field>
-
-                        <Field label="Nhà xuất bản">
-                            <select value={form.publisher?.id ?? ""} style={inputStyle}
-                                onChange={e => setForm(prev => ({ ...prev, publisher: PUBLISHERS.find(p => p.id === Number(e.target.value)) ?? null }))}>
-                                <option value="">-- Chọn NXB --</option>
-                                {PUBLISHERS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
-                            </select>
-                        </Field>
-
-                        <div style={{ gridColumn: "span 2" }}>
-                            <Field label="Mô tả">
-                                <textarea rows={4} value={form.description || ""} onChange={setStr("description")}
-                                    placeholder="Mô tả ngắn về sách..." style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
+                            <Field label="ISBN">
+                                <input value={form.isbn} onChange={setStr("isbn")} placeholder="9786..." style={inputStyle} />
                             </Field>
-                        </div>
 
+                            <Field label="Ngôn ngữ">
+                                <select value={form.language} onChange={setStr("language")} style={inputStyle}>
+                                    <option value="vi">Tiếng Việt</option>
+                                    <option value="en">English</option>
+                                </select>
+                            </Field>
+
+                            <Field label="Giá bán (₫) *">
+                                <input type="number" value={form.price} onChange={setNum("price")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Giá vốn (₫)">
+                                <input type="number" value={form.costPrice || ""} onChange={setNum("costPrice")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Tồn kho *">
+                                <input type="number" value={form.stockQuantity} onChange={setNum("stockQuantity")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Điểm đặt hàng lại">
+                                <input type="number" value={form.reorderPoint} onChange={setNum("reorderPoint")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Số trang">
+                                <input type="number" value={form.pageCount || ""} onChange={setNum("pageCount")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Năm xuất bản">
+                                <input type="number" value={form.yearPublished || ""} onChange={setNum("yearPublished")} style={inputStyle} />
+                            </Field>
+
+                            <Field label="Thể loại">
+                                <select value={form.category?.id ?? ""} style={inputStyle}
+                                    onChange={e => setForm(prev => ({ ...prev, category: CATEGORIES.find(c => c.id === Number(e.target.value)) ?? null }))}>
+                                    <option value="">-- Chọn thể loại --</option>
+                                    {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                                </select>
+                            </Field>
+
+                            <Field label="Nhà xuất bản">
+                                <select value={form.publisher?.id ?? ""} style={inputStyle}
+                                    onChange={e => setForm(prev => ({ ...prev, publisher: PUBLISHERS.find(p => p.id === Number(e.target.value)) ?? null }))}>
+                                    <option value="">-- Chọn NXB --</option>
+                                    {PUBLISHERS.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                                </select>
+                            </Field>
+
+                            <div style={{ gridColumn: "span 2" }}>
+                                <Field label="Mô tả">
+                                    <textarea rows={4} value={form.description || ""} onChange={setStr("description")}
+                                        placeholder="Mô tả ngắn về sách..." style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
+                                </Field>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -523,17 +705,36 @@ export default function BookAdmin() {
                                 </td>
 
                                 <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
-                                    <ActionBtn title="Sửa" onClick={() => setDrawer({ ...book })} hoverBg="#eef2ff" hoverBorder="#6366f1">✎</ActionBtn>
-                                    <ActionBtn title={book.onSale ? "Xóa sale" : "Đặt sale"} hoverBg="#fef9ee" hoverBorder="#f59e0b"
-                                        onClick={() => book.onSale ? handleRemoveSale(book) : setModal({ type: "sale", book })}>
-                                        {book.onSale ? "✖" : "%"}
+                                    <ActionBtn title="Sửa" onClick={() => setDrawer({ ...book })} hoverBg="#eef2ff" hoverBorder="#6366f1">
+                                        <Pencil size={16} />
                                     </ActionBtn>
-                                    <ActionBtn title={book.isActive ? "Ngừng bán" : "Kích hoạt"}
-                                        hoverBg={book.isActive ? "#fff7ed" : "#f0fdf4"} hoverBorder={book.isActive ? "#f97316" : "#22c55e"}
-                                        onClick={() => handleToggle(book)}>
-                                        {book.isActive ? "⏸" : "▶"}
+
+                                    <ActionBtn
+                                        title={book.onSale ? "Xóa sale" : "Đặt sale"}
+                                        hoverBg="#fef9ee"
+                                        hoverBorder="#f59e0b"
+                                        onClick={() => book.onSale ? handleRemoveSale(book) : setModal({ type: "sale", book })}
+                                    >
+                                        {book.onSale ? <X size={16} /> : <Percent size={16} />}
                                     </ActionBtn>
-                                    <ActionBtn title="Xóa" onClick={() => handleDelete(book)} hoverBg="#fef2f2" hoverBorder="#ef4444">🗑</ActionBtn>
+
+                                    <ActionBtn
+                                        title={book.isActive ? "Ngừng bán" : "Kích hoạt"}
+                                        hoverBg={book.isActive ? "#fff7ed" : "#f0fdf4"}
+                                        hoverBorder={book.isActive ? "#f97316" : "#22c55e"}
+                                        onClick={() => handleToggle(book)}
+                                    >
+                                        {book.isActive ? <Pause size={16} /> : <Play size={16} />}
+                                    </ActionBtn>
+
+                                    <ActionBtn
+                                        title="Xóa"
+                                        onClick={() => handleDelete(book)}
+                                        hoverBg="#fef2f2"
+                                        hoverBorder="#ef4444"
+                                    >
+                                        <Trash2 size={16} />
+                                    </ActionBtn>
                                 </td>
 
                             </tr>

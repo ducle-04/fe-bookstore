@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Menu, X, ShoppingCart, User, Search } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Menu, X, ShoppingCart, User, Search, Edit, Package, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 import logoImg from "../../../../../assets/images/logo/logo.png";
@@ -9,11 +9,16 @@ import Cart from "../Cart/Cart";
 
 const Header: React.FC = () => {
     const navigate = useNavigate();
+    const userMenuRef = useRef<HTMLDivElement>(null);
 
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
     const [search, setSearch] = useState("");
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+
+    // Giả sử user đã đăng nhập (bạn có thể kết nối với Context/Auth sau)
+    const isLoggedIn = true;
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,6 +26,17 @@ const Header: React.FC = () => {
         };
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // Click outside để đóng user menu
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+                setIsUserMenuOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleNavigate = (path: string) => {
@@ -42,8 +58,13 @@ const Header: React.FC = () => {
         }
     };
 
-    // Xử lý click icon User → chuyển đến trang Đăng nhập
-    const handleUserClick = () => {
+    const toggleUserMenu = () => {
+        setIsUserMenuOpen(!isUserMenuOpen);
+    };
+
+    const handleLogout = () => {
+        // TODO: Xóa token, clear context...
+        setIsUserMenuOpen(false);
         navigate("/login");
     };
 
@@ -110,18 +131,71 @@ const Header: React.FC = () => {
                             >
                                 <ShoppingCart size={24} />
                                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-medium w-5 h-5 flex items-center justify-center rounded-full">
-                                    2
+                                    3
                                 </span>
                             </button>
 
-                            {/* User Icon */}
-                            <button
-                                onClick={handleUserClick}
-                                className="text-gray-700 hover:text-cyan-600 transition p-1"
-                                title="Đăng nhập"
-                            >
-                                <User size={24} />
-                            </button>
+                            {/* User Icon + Dropdown */}
+                            {isLoggedIn ? (
+                                <div className="relative" ref={userMenuRef}>
+                                    <button
+                                        onClick={toggleUserMenu}
+                                        className="text-gray-700 hover:text-cyan-600 transition p-1"
+                                        title="Tài khoản"
+                                    >
+                                        <User size={24} />
+                                    </button>
+
+                                    {/* Dropdown Menu */}
+                                    {isUserMenuOpen && (
+                                        <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2 z-50">
+                                            <div className="px-4 py-3 border-b">
+                                                <p className="font-semibold text-gray-800">ABC</p>
+                                                <p className="text-sm text-gray-500">abc@example.com</p>
+                                            </div>
+
+                                            <button
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                    navigate("/profile");
+                                                }}
+                                                className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 text-gray-700"
+                                            >
+                                                <Edit size={18} />
+                                                Chỉnh sửa profile
+                                            </button>
+
+                                            <button
+                                                onClick={() => {
+                                                    setIsUserMenuOpen(false);
+                                                    navigate("/my-orders");
+                                                }}
+                                                className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 text-gray-700"
+                                            >
+                                                <Package size={18} />
+                                                Danh sách đơn hàng
+                                            </button>
+
+                                            <div className="border-t my-1"></div>
+
+                                            <button
+                                                onClick={handleLogout}
+                                                className="w-full px-4 py-3 text-left flex items-center gap-3 hover:bg-gray-50 text-red-600"
+                                            >
+                                                <LogOut size={18} />
+                                                Đăng xuất
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => navigate("/login")}
+                                    className="text-gray-700 hover:text-cyan-600 transition p-1"
+                                >
+                                    <User size={24} />
+                                </button>
+                            )}
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -152,19 +226,43 @@ const Header: React.FC = () => {
                                 </button>
                             ))}
 
-                            <div className="flex gap-6 pt-4 border-t">
+                            <div className="flex flex-col gap-4 pt-4 border-t">
                                 <button
                                     onClick={() => setIsCartOpen(true)}
-                                    className="flex items-center gap-2 text-gray-700 hover:text-cyan-600"
+                                    className="flex items-center gap-3 text-gray-700 hover:text-cyan-600"
                                 >
-                                    <ShoppingCart size={22} /> Giỏ hàng (2)
+                                    <ShoppingCart size={22} /> Giỏ hàng (3)
                                 </button>
-                                <button
-                                    onClick={handleUserClick}
-                                    className="flex items-center gap-2 text-gray-700 hover:text-cyan-600"
-                                >
-                                    <User size={22} /> Đăng nhập
-                                </button>
+
+                                {isLoggedIn ? (
+                                    <>
+                                        <button
+                                            onClick={() => navigate("/profile")}
+                                            className="flex items-center gap-3 text-gray-700 hover:text-cyan-600"
+                                        >
+                                            <Edit size={22} /> Chỉnh sửa profile
+                                        </button>
+                                        <button
+                                            onClick={() => navigate("/my-orders")}
+                                            className="flex items-center gap-3 text-gray-700 hover:text-cyan-600"
+                                        >
+                                            <Package size={22} /> Danh sách đơn hàng
+                                        </button>
+                                        <button
+                                            onClick={handleLogout}
+                                            className="flex items-center gap-3 text-red-600 hover:text-red-700"
+                                        >
+                                            <LogOut size={22} /> Đăng xuất
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => navigate("/login")}
+                                        className="flex items-center gap-3 text-gray-700 hover:text-cyan-600"
+                                    >
+                                        <User size={22} /> Đăng nhập
+                                    </button>
+                                )}
                             </div>
                         </div>
                     )}
@@ -174,13 +272,10 @@ const Header: React.FC = () => {
             {/* Cart Sidebar */}
             {isCartOpen && (
                 <div className="fixed inset-0 z-[60] flex">
-                    {/* Overlay */}
                     <div
                         className="absolute inset-0 bg-black/50 backdrop-blur-sm"
                         onClick={() => setIsCartOpen(false)}
                     />
-
-                    {/* Cart Panel */}
                     <div className="relative ml-auto w-full max-w-md h-full bg-white shadow-2xl overflow-hidden flex flex-col">
                         <div className="flex items-center justify-between p-6 border-b">
                             <h2 className="text-2xl font-bold text-gray-900">Giỏ hàng</h2>
