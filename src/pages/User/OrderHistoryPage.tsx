@@ -293,7 +293,7 @@ export default function OrderHistoryPage() {
                                         </button>
                                     )}
 
-                                    {order.status === "Đang giao" && (
+                                    {["Chờ xác nhận", "Đã xác nhận"].includes(order.status) && (
                                         <button
                                             onClick={() => handleCancelOrder(order.id)}
                                             className="px-4 py-2 text-sm border text-red-500 border-red-400 rounded-lg hover:bg-red-50"
